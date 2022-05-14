@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-crear-producto',
@@ -7,9 +8,23 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CrearProductoComponent implements OnInit {
 
-  constructor() { }
+  productoForm: FormGroup;
+
+//inyectando el formulario reactivo
+  constructor(private fb: FormBuilder) { 
+    this.productoForm = this.fb.group({
+      producto:['', Validators.required],
+      categoria:['', Validators.required],
+      ubicacion:['', Validators.required],
+      precio:['', Validators.required]
+    })
+  }
 
   ngOnInit(): void {
+  }
+
+  agregarproductos(){
+    console.log(this.productoForm)
   }
 
 }
