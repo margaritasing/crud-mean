@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 
 import { Producto } from 'src/app/models/producto';
+import { ProductoService } from '../../services/producto.service';
 
 @Component({
   selector: 'app-crear-producto',
@@ -15,8 +16,10 @@ export class CrearProductoComponent implements OnInit {
   productoForm: FormGroup;
 
 //inyectando el formulario reactivo
-  constructor(private fb: FormBuilder, private router:Router,
-    private toastr: ToastrService) { 
+  constructor(private fb: FormBuilder, 
+    private router:Router,
+    private toastr: ToastrService,
+    private productoService: ProductoService) { 
     this.productoForm = this.fb.group({
       producto:['', Validators.required],
       categoria:['', Validators.required],
@@ -35,8 +38,16 @@ export class CrearProductoComponent implements OnInit {
       ubicacion:this.productoForm.get('ubicacion')?.value,
       precio:this.productoForm.get('precio')?.value,
     }
-    this.toastr.success('El producto fue registrado', 'Producto Creado');
-    this.router.navigate(['/'])    
+    
+    this.productoService.guardarProducto(PRODUCTO).subscribe(data =>{
+      this.toastr.success('El producto fue registrado', 'Producto Creado');
+      this.router.navigate(['/'])    
+
+    }, error => { 
+      console.log(error)
+      this.productoForm.reset();
+    })
+
   }
 
 }
